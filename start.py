@@ -1,3 +1,6 @@
+!pip install kaggle
+!kaggle competitions download -c mva-mash-kernel-methods-2021-2022
+
 import pandas as pd
 from sift import SIFT
 
