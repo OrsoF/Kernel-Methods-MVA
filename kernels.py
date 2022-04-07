@@ -182,7 +182,7 @@ class KernelSVC_OneVsRest :
     def predict(self, X):
         """ Predictions consist in choosing the category for which the classifier gives the highest value of the decision function"""
         y = np.zeros((len(X), self.num_classes))
-        for i in range(self.num_classes) :
+        for i in tqdm(range(self.num_classes)) :
             y[:,i] = self.pool[i].separating_function(X) + self.pool[i].b  # value of the decision function
   
         return y.argmax(axis=-1)
