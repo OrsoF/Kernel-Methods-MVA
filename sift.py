@@ -1,4 +1,5 @@
 import numpy as np
+from tqdm import tqdm
 
 class SIFT:
     def __init__(self, gs = 6, ps = 31, gaussian_thres = 7., \
@@ -114,6 +115,7 @@ class SIFT:
     
     def get_features_from_data(self, data):
         out = []
-        for idx, dt in enumerate(data):
+        for idx in tqdm(range(len(data))):
+            dt = data[idx]
             out.append(self.get_features(np.mean(np.double(dt), axis=2))[0][0])
         return np.array(out)

@@ -1,3 +1,8 @@
+from tqdm import tqdm
+import numpy as np
+from scipy import optimize
+
+
 class Linear:
     def __init__(self):
         self.name= 'linear'
