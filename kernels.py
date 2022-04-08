@@ -59,35 +59,35 @@ class KernelSVC_Binary:
         
     def fit(self, X, y):
         self._K = self.kernel(X, X)
-        mu_support, idx_support = self._svm_solver_non_sep(self._K, y, self.C)
-        w = self._get_w(mu_support, idx_support, X, y)
-        b = self._compute_b(self._K, y, mu_support, idx_support)
+        mu_support, idx_support = self.svm_solver(self._K, y, self.C)
+        w = self.get_w(mu_support, idx_support, X, y)
+        b = self.compute_b(self._K, y, mu_support, idx_support)
         return w, b, mu_support, idx_support
         
-    def _svm_solver_non_sep(self, K, y, C):
+    def svm_solver(self, K, y, C):
         n = y.shape[0]
         y = y.reshape((n, 1))
         H = np.dot(y, y.T)*K
         e = np.ones(n)
         A = y
         b = np.zeros(n)
-        mu = self._qp(H, e, A, b, C, l=1e-8, verbose=False)
+        mu = self.quadratic_programming_solver(H, e, A, b, C, l=1e-8, verbose=False)
         idx_support = np.where(np.abs(mu) > 1e-5)[0]
         mu_support = mu[idx_support]
         return mu_support, idx_support
         
-    def _compute_b(self, K, y, mu_support, idx_support):
+    def compute_b(self, K, y, mu_support, idx_support):
         num_support_vector = idx_support.size
         y_support = y[idx_support]
         K_support = K[idx_support][:, idx_support]
         b = [y_support[j] - sum([mu_support[i]*y_support[i]*K_support[i][j] for i in range(num_support_vector)]) for j in range(num_support_vector)]
         return np.mean(b)
         
-    def _get_w(self, mu_support, idx_support, X, y):
+    def get_w(self, mu_support, idx_support, X, y):
         return np.sum((mu_support * y[idx_support])[: , None] * X[idx_support], axis=0)
 
-    def _qp(self, H, e, A, b, C=np.inf, l=1e-8, verbose=True):
-        # Gram matrix
+    def quadratic_programming_solver(self, H, e, A, b, C=np.inf, l=1e-8, verbose=True):
+        
         n = H.shape[0]
         H = cvxopt.matrix(H)
         A = cvxopt.matrix(A, (1, n))
