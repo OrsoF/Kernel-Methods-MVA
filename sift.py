@@ -2,16 +2,11 @@ import numpy as np
 from tqdm import tqdm
 
 class SIFT:
-    # def __init__(self, gs = 6, ps = 31, gaussian_thres = 7., \
-                 # gaussian_sigma = 4, sift_threshold = .3, num_angles = 12, \
-                 # bins = 5, alpha = 9.0):
-    def __init__(self, gs = 8, ps = 16, gaussian_thres = 1.0, \
-                 gaussian_sigma = 0.8, sift_threshold = 0.2, num_angles = 12, \
-                 bins = 5, alpha = 9.0):
+    def __init__(self, gs = 7, ps = 30, gaussian_thres = 0.6, gaussian_sigma = 0.4, sift_threshold = 0.3, num_angles = 12, bins = 5, alpha = 9.0):
         self.num_angles = num_angles
         self.bins = bins
         self.alpha = alpha
-        self.angle_list = np.array(range(num_angles))*2.0*np.pi/num_angles
+        self.angle_list = 2.0*np.pi*np.array(range(num_angles))/num_angles
         self.gs = gs
         self.ps = ps
         self.gaussian_thres = gaussian_thres
@@ -22,6 +17,7 @@ class SIFT:
     # Private Methods
     
     def gaussian_filter(self, sigma):
+        # Here we create the grid of gaussian coefficients
         coeff = int(2*np.ceil(sigma))
         gaussian_range = np.array(range(-coeff, coeff+1))**2
         gaussian_range = gaussian_range[:, np.newaxis] + gaussian_range
@@ -33,6 +29,7 @@ class SIFT:
         return height, width
     
     def convolution_image_gaussian(self, image, gaussian):
+        # Used to convolve with a grid of gaussian coefficients
         imR, imC = image.shape
         kR, kC = gaussian.shape
         y = np.zeros((imR,imC))
@@ -50,6 +47,7 @@ class SIFT:
         return y
     
     def normalize_features(self, features):
+        # Used to normalize the obtained features relatively to the gaussian threshold
         features_len = np.sqrt(np.sum(features**2, axis=1))
         hcontrast = (features_len >= self.gaussian_thres)
         features_len[features_len < self.gaussian_thres] = self.gaussian_thres
@@ -60,6 +58,7 @@ class SIFT:
         return features
     
     def grid(self, image, grid_H, grid_W):
+        # We extract features from the image using the grid and the gaussian convolutions 
         H, W = image.shape
         n_patches = grid_H.size
         features = np.zeros((n_patches, self.bins * self.bins * self.num_angles))
@@ -73,12 +72,12 @@ class SIFT:
         for i in range(n_patches):
             feat = np.zeros((self.num_angles, self.bins**2))
             for j in range(self.num_angles):
-                feat[j] = np.dot(self.weights,\
-                        orient[j,grid_H[i]:grid_H[i]+self.ps, grid_W[i]:grid_W[i]+self.ps].flatten())
+                feat[j] = np.dot(self.weights,orient[j,grid_H[i]:grid_H[i]+self.ps, grid_W[i]:grid_W[i]+self.ps].flatten())
             features[i] = feat.flatten()
         return features
 
     def weights(self, bins):
+        # Method to get weights from the grid
         size_unit = np.array(range(self.ps))
         sph, spw = np.meshgrid(size_unit, size_unit)
         sph.resize(sph.size)
