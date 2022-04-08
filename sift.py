@@ -2,8 +2,11 @@ import numpy as np
 from tqdm import tqdm
 
 class SIFT:
-    def __init__(self, gs = 6, ps = 31, gaussian_thres = 7., \
-                 gaussian_sigma = 4, sift_threshold = .3, num_angles = 12, \
+    # def __init__(self, gs = 6, ps = 31, gaussian_thres = 7., \
+                 # gaussian_sigma = 4, sift_threshold = .3, num_angles = 12, \
+                 # bins = 5, alpha = 9.0):
+    def __init__(self, gs = 8, ps = 16, gaussian_thres = 1.0, \
+                 gaussian_sigma = 0.8, sift_threshold = 0.2, num_angles = 12, \
                  bins = 5, alpha = 9.0):
         self.num_angles = num_angles
         self.bins = bins

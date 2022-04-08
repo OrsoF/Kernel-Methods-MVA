@@ -9,9 +9,9 @@ if not exists('mva-mash-kernel-methods-2021-2022'):
     with zipfile.ZipFile('mva-mash-kernel-methods-2021-2022.zip', 'r') as zip_ref:
         zip_ref.extractall('mva-mash-kernel-methods-2021-2022')
 
-Xtr = np.array(pd.read_csv('mva-mash-kernel-methods-2021-2022\\mva-mash-kernel-methods-2021-2022\\Xtr.csv',header=None,sep=',',usecols=range(3072)))[:2000]
-Xte = np.array(pd.read_csv('mva-mash-kernel-methods-2021-2022\\mva-mash-kernel-methods-2021-2022\\Xte.csv',header=None,sep=',',usecols=range(3072)))[:2000]
-Ytr = np.array(pd.read_csv('mva-mash-kernel-methods-2021-2022\\mva-mash-kernel-methods-2021-2022\\Ytr.csv',sep=',',usecols=[1])).squeeze()[:2000]
+Xtr = np.array(pd.read_csv('mva-mash-kernel-methods-2021-2022\\mva-mash-kernel-methods-2021-2022\\Xtr.csv',header=None,sep=',',usecols=range(3072)))[:50]
+Xte = np.array(pd.read_csv('mva-mash-kernel-methods-2021-2022\\mva-mash-kernel-methods-2021-2022\\Xte.csv',header=None,sep=',',usecols=range(3072)))[:50]
+Ytr = np.array(pd.read_csv('mva-mash-kernel-methods-2021-2022\\mva-mash-kernel-methods-2021-2022\\Ytr.csv',sep=',',usecols=[1])).squeeze()[:50]
 
 print('Extracting SIFT descriptors...')
 sift = SIFT()
