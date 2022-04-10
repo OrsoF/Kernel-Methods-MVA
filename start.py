@@ -23,7 +23,7 @@ X_test_sift = sift.get_features_from_data(Xte.reshape((Xte.shape[0], 32, 32, 3))
 n_classes = len(set(Ytr))
 
 print('Fitting...')
-clf = KernelSVC_OneVsRest(num_classes = n_classes, C = 0.5, kernel = chi2(gamma = 1.).kernel)
+clf = KernelSVC_OneVsRest(num_classes = n_classes, C = 10., kernel = chi2(gamma = 1.).kernel)
 clf.fit(X_train_sift, y_train_sift)
 
 print('Prediction...')
